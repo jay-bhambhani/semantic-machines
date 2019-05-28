@@ -5,8 +5,7 @@ parser = ArgumentParser()
 parser.add_argument('--array_size', '-s', type=int, default=10000)
 parser.add_argument('--num_hashes', '-n', type=int, default=3)
 parser.add_argument('--item_length', '-l', type=int, default=2000)
-
-WORDS_PATH = '/usr/share/dict/words'
+parser.add_argument('--dictionary_path', '-d', type=str, default='/usr/share/dict/words')
 
 
 def setup_bloomfilter(bloom_filter, words):
@@ -30,7 +29,7 @@ def handle_output(bloom_filter, item_length, input_word, output):
 if __name__ == '__main__':
     args = parser.parse_args()
     bf = BloomFilter(args.array_size, args.num_hashes)
-    with open(WORDS_PATH, 'rU') as word_file:
+    with open(args.dictionary_path, 'rU') as word_file:
         setup_bloomfilter(bf, word_file)
     print('bloom filter has {zeros} zero indices'.format(zeros=len([i for i in bf.array if i == 0])))
     while True:
